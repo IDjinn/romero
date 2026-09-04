@@ -1,0 +1,36 @@
+# Romero Design Rules
+
+Design rules for frontends on **web, desktop, and mobile**. Component base: **shadcn/ui**. The rules below are non-negotiable; the modules in `rules/` expand them.
+
+**Read the module for your task before writing UI code.** Do not invent parallel rules; where these rules are silent, follow shadcn/ui defaults.
+
+## Non-negotiables
+
+1. **shadcn/ui first.** Build screens from shadcn/ui primitives (Dialog, DropdownMenu, Popover, Sheet, Tooltip, Command, Sonner for toasts…). Never hand-roll a complex primitive and never make a clickable `<div>` — real `<button>`/`<a>` only.
+2. **Dark theme is the default; light is a toggle.** Ship both themes' CSS variables; apply `.dark` by default (inline script before paint, no flash). Verify every screen in both themes.
+3. **Default palette unless explicitly overridden.** Use the stock shadcn token set (`background`, `foreground`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `destructive`, `border`, `input`, `ring`) with its default neutral values. No custom colors, gradients, or brand hues unless explicitly requested.
+4. **Motion is gated.** Name the purpose before animating. Keyboard-initiated and 100+/day actions never animate. UI durations stay under 300ms. Animate `transform`/`opacity` only. `prefers-reduced-motion` support ships with the animation, not after.
+5. **Every state has two exits.** Navigation Redundancy Rule: each screen, overlay, or mode is left via a visible affordance AND a platform convention — Escape/browser back on web; Escape, `Alt+←`, mouse side buttons on desktop; Android system back; iOS edge swipe plus a visible Back/Close button.
+6. **No backend details in the frontend.** Never render or imply internal implementation state ("feature X is not enabled", "the service does Y", queue/cache/auth internals). UI states derive only from the explicit API contract; absent data renders neutral empty/loading/error states.
+7. **Clean and simplified.** One primary action per view, common path first with advanced options one level deeper, specific labels over generic, plain language, visible hierarchy. If an element does not earn its place, remove it.
+
+## Module index — read before the matching task
+
+| Task | Read |
+| --- | --- |
+| Any UI: layout, colors, typography, components, theming | `rules/design-system.md` |
+| Adding or changing animation, transitions, navigation feel | `rules/motion.md` |
+| Building routes, screens, modals, sheets, drawers, menus | `rules/navigation.md` |
+| Data fetching, lists, heavy screens (web or React Native) | `rules/platforms.md` |
+| UI copy, empty/error states, feedback, destructive actions | `rules/content.md` |
+
+## Pre-delivery checklist (condensed)
+
+Walk the implementation, not the intention. Any "no" means not done — full version in `rules/checklist.md`.
+
+- [ ] Every interactive element is a real control, keyboard-reachable, with a visible focus ring.
+- [ ] Both themes verified (dark is the default); only stock shadcn tokens used.
+- [ ] Every animation passes the gates: purpose named, ≤300ms, `transform`/`opacity` only, reduced-motion handled, no `transition: all`, no `scale(0)`, no `ease-in`.
+- [ ] Every screen/overlay has ≥2 exits; Escape closes the topmost overlay and restores focus; the platform back/gesture works.
+- [ ] Zero backend/internal details in UI copy or code comments; empty/loading/error states are neutral.
+- [ ] No layout properties animated; long lists virtualized; no obvious waterfall or re-render defects.

@@ -1,0 +1,7 @@
+# Local tool state
+.mimosa/
+.zcode/
+
+# OS artifacts
+Thumbs.db
+.DS_Store
