@@ -38,6 +38,8 @@ Component base for all platforms. Web and desktop shells (browser, Electron, Tau
 - One consistent radius scale (shadcn `--radius` and its derived sizes); no per-component radius inventions.
 - Group by proximity: a control sits next to what it affects; separate groups with space before reaching for borders.
 - Depth on dark: prefer borders and surface contrast over heavy shadows. Use `backdrop-filter` translucency only for floating chrome (nav bars, sheets) with content scrolling underneath — never stack translucent surfaces on each other.
+- Relative units only on web: `rem` for sizes and spacing, `em` where a value scales with its own text. `px` and other absolute units ignore the user's text-size setting and are a rejection — sole exception: hairline `1px` borders/shadow offsets (the shadcn default); media-query breakpoints use `rem` too.
+- Responsive by default: fluid grid/flex, percentage widths, `max-width` content columns; no horizontal scroll from phone widths through 200% zoom and the largest text-size setting.
 
 ## Interactive states — every interactive element
 

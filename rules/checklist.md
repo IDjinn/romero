@@ -9,6 +9,8 @@ Walk the implementation, not the intention. Any "no" means the task is not done.
 - [ ] Only stock shadcn tokens and default palette values used; no custom colors unless explicitly requested.
 - [ ] Every interactive element has a visible `:focus-visible` ring, press feedback, hover gated behind `(hover: hover) and (pointer: fine)`, plus disabled and loading states.
 - [ ] Spacing on the 4px grid; consistent radius scale; layout holds at common breakpoints and with larger text sizes.
+- [ ] (React projects) Every styled definition lives in a `<Component>.styles.ts`/`.js` sibling file; styled components reference tokens only (`var(--token)` on web, `theme.*` on React Native); no `StyleSheet.create` or inline style objects in component files.
+- [ ] Styles are responsive: web uses `rem`/`em` only (no `px` or absolute units) with fluid layout verified at phone/tablet/desktop widths and 200% zoom; React Native uses theme scales with flex/percentage containers, no hardcoded container dimensions.
 
 ## 2. Motion pass
 

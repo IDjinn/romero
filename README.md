@@ -5,6 +5,7 @@ Agent-agnostic design rules for frontends — **web, desktop, and mobile**. Plai
 ## What this package enforces
 
 - **shadcn/ui as the component base.** Use the primitives; never hand-roll dialogs, dropdowns, sheets, or command menus.
+- **styled-components for layout** on React/Next.js and React Native — styles live in sibling `<Component>.styles.ts` files; shadcn/ui (or its React Native equivalent) keeps owning behavior primitives.
 - **Dark theme by default**, light theme via toggle. Both are always styled.
 - **Default shadcn palette** (neutral/zinc) unless colors are explicitly requested.
 - **Purposeful motion for fluid navigation**: every animation passes a frequency and purpose gate, stays under 300ms, animates only `transform`/`opacity`, and ships with reduced-motion support.
@@ -24,6 +25,8 @@ Agent-agnostic design rules for frontends — **web, desktop, and mobile**. Plai
 | --- | --- |
 | `AGENTS.md` | Entry point: non-negotiables, module index, condensed checklist |
 | `rules/design-system.md` | shadcn/ui foundations: theming, colors, typography, states |
+| `rules/react-next.md` | React/Next.js: styled-components layout, `.styles` file convention, SSR setup |
+| `rules/react-native.md` | React Native: styled-components/native layout, theme object, safe areas |
 | `rules/motion.md` | Animation gates, tokens, per-platform tooling, never-ship list |
 | `rules/navigation.md` | Redundancy Rule and per-platform navigation obligations |
 | `rules/platforms.md` | Performance rules that affect UX (web/Next.js, React Native) |

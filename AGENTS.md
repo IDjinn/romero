@@ -1,6 +1,6 @@
 # Romero Design Rules
 
-Design rules for frontends on **web, desktop, and mobile**. Component base: **shadcn/ui**. The rules below are non-negotiable; the modules in `rules/` expand them.
+Design rules for frontends on **web, desktop, and mobile**. Component base: **shadcn/ui**; layout styling: **styled-components** on React/Next.js and React Native. The rules below are non-negotiable; the modules in `rules/` expand them.
 
 **Read the module for your task before writing UI code.** Do not invent parallel rules; where these rules are silent, follow shadcn/ui defaults.
 
@@ -13,12 +13,15 @@ Design rules for frontends on **web, desktop, and mobile**. Component base: **sh
 5. **Every state has two exits.** Navigation Redundancy Rule: each screen, overlay, or mode is left via a visible affordance AND a platform convention — Escape/browser back on web; Escape, `Alt+←`, mouse side buttons on desktop; Android system back; iOS edge swipe plus a visible Back/Close button.
 6. **No backend details in the frontend.** Never render or imply internal implementation state ("feature X is not enabled", "the service does Y", queue/cache/auth internals). UI states derive only from the explicit API contract; absent data renders neutral empty/loading/error states.
 7. **Clean and simplified.** One primary action per view, common path first with advanced options one level deeper, specific labels over generic, plain language, visible hierarchy. If an element does not earn its place, remove it.
+8. **styled-components structures the layout (React projects).** On React/Next.js, React-based desktop, and React Native, layout and custom styling are written in styled-components, defined in sibling `<Component>.styles.ts`/`.js` files — never inline in component files. Styles are responsive: `rem`/`em` only on web, flex/percentage layout with theme tokens on React Native; absolute pixel sizing is a rejection. shadcn/ui (or its React Native equivalent) still owns behavior primitives.
 
 ## Module index — read before the matching task
 
 | Task | Read |
 | --- | --- |
 | Any UI: layout, colors, typography, components, theming | `rules/design-system.md` |
+| React / Next.js app: stack, styled-components layout, style files, SSR setup | `rules/react-next.md` |
+| React Native app: stack, styled-components layout, style files, theme | `rules/react-native.md` |
 | Adding or changing animation, transitions, navigation feel | `rules/motion.md` |
 | Building routes, screens, modals, sheets, drawers, menus | `rules/navigation.md` |
 | Data fetching, lists, heavy screens (web or React Native) | `rules/platforms.md` |
@@ -34,3 +37,5 @@ Walk the implementation, not the intention. Any "no" means not done — full ver
 - [ ] Every screen/overlay has ≥2 exits; Escape closes the topmost overlay and restores focus; the platform back/gesture works.
 - [ ] Zero backend/internal details in UI copy or code comments; empty/loading/error states are neutral.
 - [ ] No layout properties animated; long lists virtualized; no obvious waterfall or re-render defects.
+- [ ] (React projects) All styled definitions live in `<Component>.styles.*` siblings; tokens only — no hardcoded colors, no inline style objects in component files.
+- [ ] Styles are responsive: web uses `rem`/`em` only (no `px`) with fluid layout verified at breakpoints and 200% zoom; React Native uses theme scales and flex/percentage containers, no hardcoded container dimensions.
