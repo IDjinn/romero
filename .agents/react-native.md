@@ -1,6 +1,6 @@
 # React Native — Project Rules
 
-Entry module for React Native apps (Expo or bare workflow). **styled-components/native structures all layout and appearance**; behavior primitives come from the shadcn-equivalent set (`rules/design-system.md`). All global rules apply unchanged — this module adds the stack, file, and theme conventions.
+Entry module for React Native apps (Expo or bare workflow). **styled-components/native structures all layout and appearance**; behavior primitives come from the shadcn-equivalent set (`ui.md`). All global rules apply unchanged — this module adds the stack, file, and theme conventions.
 
 ## Division of labor
 
@@ -38,18 +38,18 @@ The `px` suffix is styled-components' React Native convention: it is stripped be
 
 ## Theming — token object, dark default
 
-- React Native has no CSS variables: the theme is a plain object using the same shadcn token names (`background`, `foreground`, `card`, `primary`, `secondary`, `muted`, `mutedForeground`, `accent`, `destructive`, `border`, `input`, `ring`). Values are the default zinc palette converted to `#rrggbb` — no custom palette unless explicitly requested (non-negotiable 3).
+- React Native has no CSS variables: the theme is a plain object using the same shadcn token names (`background`, `foreground`, `card`, `primary`, `secondary`, `muted`, `mutedForeground`, `accent`, `destructive`, `border`, `input`, `ring`). Values are the default zinc palette converted to `#rrggbb` — no custom palette unless explicitly requested.
 - One `theme.ts` exports `darkTheme` (default), `lightTheme`, `space` (4-point grid scale), `radius`, `type` (font size/weight scale), and the font stack. styled-components' `ThemeProvider` wraps the app; components read tokens via `${({ theme }) => …}` or `useTheme()` — never through screen-level color conditionals.
 - Dark ships as the default; the toggle persists the choice and it is resolved before the first screen renders (during splash/startup) — no wrong-theme flash on cold start.
-- Toggling switches primitives and styled components together (one theme object). Both themes verified on every screen (non-negotiable 2).
+- Toggling switches primitives and styled components together (one theme object). Both themes verified on every screen.
 
 ## Layout
 
 - Flexbox; screen structure uses dimensionless `flex`; spacing from `theme.space` (4px grid); radius from `theme.radius`; typography hierarchy from the theme (weight + size), system font by default.
 - Safe areas via `react-native-safe-area-context`; insets reach styled components as props — never hardcode status-bar/notch dimensions.
 - `KeyboardAvoidingView` (or the library equivalent) on every screen with inputs; the primary action stays reachable with the keyboard open.
-- Never disable `allowFontScaling`; layouts hold at larger text sizes (design-system typography rule).
-- Long lists use FlatList/FlashList (`rules/platforms.md`) — styled components style the rows; a `ScrollView` mapping unbounded data stays a rejection.
+- Never disable `allowFontScaling`; layouts hold at larger text sizes.
+- Long lists use FlatList/FlashList (see Performance) — styled components style the rows; a `ScrollView` mapping unbounded data stays a rejection.
 
 ## Responsiveness — adaptive, not fixed
 
@@ -60,9 +60,17 @@ The `px` suffix is styled-components' React Native convention: it is stripped be
 
 ## Navigation, motion, states
 
-- Navigation follows `rules/navigation.md` (mobile section): Android hardware/predictive back dismisses the topmost overlay first; iOS edge swipe stays intact; every screen, modal, and sheet carries a visible Back/Close affordance.
-- Motion follows `rules/motion.md`; gestures animate through Reanimated worklets on the UI thread (`rules/platforms.md`); check `AccessibilityInfo.isReduceMotionEnabled` and ship the reduced variant with the animation.
-- Empty/loading/error states follow `rules/content.md` — neutral wording, next action offered, zero internals. Async regions render skeletons matching the final layout (the primitive set's `Skeleton`); images cross-fade from a backend-provided preview when the contract has one.
+- Navigation follows `navigation.md` (mobile section): Android hardware/predictive back dismisses the topmost overlay first; iOS edge swipe stays intact; every screen, modal, and sheet carries a visible Back/Close affordance.
+- Motion follows `motion.md`; gestures animate through Reanimated worklets on the UI thread; check `AccessibilityInfo.isReduceMotionEnabled` and ship the reduced variant with the animation.
+- Empty/loading/error states follow `ui.md` — neutral wording, next action offered, zero internals. Async regions render skeletons matching the final layout (the primitive set's `Skeleton`); images cross-fade from a backend-provided preview when the contract has one.
+
+## Performance
+
+- Profile before optimizing: React Native DevTools Profiler on the target interaction. No speculative memoization; no flagging stale closures without a shown read path; anything optimized was measured before and re-measured after.
+- Startup: native navigation (`react-native-screens`); measure TTI on cold starts only; preload commonly-used expensive screens.
+- Search/filter `TextInput` stays uncontrolled (or carefully isolated) so keystrokes don't re-render the screen.
+- Bottom sheets come from an optimized GestureHandler/Reanimated-based library; keep re-renders out of the drag path.
+- Avoid barrel imports; keep Hermes enabled; check a dependency's size before adding it.
 
 ## Anti-patterns — automatic rejections
 

@@ -1,6 +1,6 @@
 # Pre-Delivery Checklist
 
-Walk the implementation, not the intention. Any "no" means the task is not done. State which items were verified and how (what you pressed, tabbed through, rendered in both themes) — "should work" is not verification.
+Walk the implementation, not the intention. Any "no" means the task is not done. State which items were verified and how (what you pressed, tabbed through, rendered in both themes) — "should work" is not verification. Tooling and verification techniques live in `testing.md`.
 
 ## 1. Design system pass
 

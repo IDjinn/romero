@@ -1,6 +1,6 @@
 # React / Next.js — Project Rules
 
-Entry module for React and Next.js (App Router) apps. **styled-components structures the layout**; shadcn/ui keeps owning behavior primitives (`rules/design-system.md`). All global rules apply unchanged — this module adds the stack, file, and SSR conventions.
+Entry module for React and Next.js (App Router) apps. **styled-components structures the layout**; shadcn/ui keeps owning behavior primitives (`ui.md`). All global rules apply unchanged — this module adds the stack, file, SSR, and performance conventions.
 
 ## Division of labor
 
@@ -56,9 +56,9 @@ export const Meta = styled.p`
 
 ## Theming — one token system
 
-- The shadcn CSS variables (`:root` / `.dark`) remain the single source of truth (non-negotiable 3). Styled components consume them as `var(--token)` — no hex/rgb literals, no parallel JS color object.
-- No styled-components `ThemeProvider` on web: the `.dark` class toggle (non-negotiable 2) switches shadcn primitives and styled components together, for free.
-- Motion inside styled components uses the `rules/motion.md` tokens, e.g. `transition: transform var(--duration-base) var(--ease-out);` — never literal eases, durations, or `transition: all`.
+- The shadcn CSS variables (`:root` / `.dark`) remain the single source of truth. Styled components consume them as `var(--token)` — no hex/rgb literals, no parallel JS color object.
+- No styled-components `ThemeProvider` on web: the `.dark` class toggle switches shadcn primitives and styled components together, for free.
+- Motion inside styled components uses the `motion.md` tokens, e.g. `transition: transform var(--duration-base) var(--ease-out);` — never literal eases, durations, or `transition: all`.
 
 ## Responsiveness — relative units only, fluid by default
 
@@ -72,7 +72,16 @@ export const Meta = styled.p`
 - App Router; pages and layouts are server components by default. styled components are client-side: any file that defines or imports them is a client component (`'use client'`). Keep pages on the server by isolating styled subtrees in client components.
 - Enable once in `next.config`: `compiler: { styledComponents: true }` — readable class names, SSR support, dead-code elimination.
 - Mount the SSR registry once in the root layout using the official pattern: a client registry component with `ServerStyleSheet` + `StyleSheetManager` + `useServerInsertedHTML`. Verify with a hard reload under network throttling: no flash of unstyled content.
-- Route-level `loading.tsx` renders skeletons in the route's final layout — the shell stays mounted, never a bare spinner page; `error.tsx` and `not-found.tsx` provide the other neutral states from `rules/content.md`; data-fetching and bundle rules live in `rules/platforms.md`.
+- Route-level `loading.tsx` renders skeletons in the route's final layout — the shell stays mounted, never a bare spinner page; `error.tsx` and `not-found.tsx` provide the other neutral states from `ui.md`.
+
+## Performance
+
+- **No waterfalls**: fire independent operations in parallel (`Promise.all`); move `await`s into branches that actually use them; check cheap sync conditions before awaiting flags; start promises early and await late.
+- **Bundle size**: import directly from source modules, never through barrel files; dynamically import heavy components (editors, charts, maps); load analytics and third-party scripts after hydration; preload on hover/focus for perceived speed.
+- **Server → client**: minimize serialized props — pass client components only what they render; authenticate server actions like API routes.
+- **Re-render hygiene**: derive state during render instead of syncing it in effects; never define components inside components; subscribe to derived booleans, not raw values; `useDeferredValue` for expensive typing-driven renders; `startTransition` for non-urgent updates.
+- Suspense boundaries around slow regions so the page stays mounted and interactive around them; skeletons match the final layout (`ui.md`); `content-visibility` for long lists.
+- Anything optimized was measured before and re-measured after — profile the target interaction first, revert if metrics don't improve.
 
 ## Anti-patterns — automatic rejections
 
@@ -83,3 +92,4 @@ export const Meta = styled.p`
 - Two token systems: CSS variables for primitives, a JS color object for styled components.
 - `px` (or any absolute unit) in a web `.styles` file.
 - Fixed-width layout: horizontal overflow at common breakpoints, at 200% zoom, or with larger text sizes.
+- Waterfalls (sequential awaits of independent calls) and barrel-file imports.
