@@ -62,7 +62,7 @@ The `px` suffix is styled-components' React Native convention: it is stripped be
 
 - Navigation follows `rules/navigation.md` (mobile section): Android hardware/predictive back dismisses the topmost overlay first; iOS edge swipe stays intact; every screen, modal, and sheet carries a visible Back/Close affordance.
 - Motion follows `rules/motion.md`; gestures animate through Reanimated worklets on the UI thread (`rules/platforms.md`); check `AccessibilityInfo.isReduceMotionEnabled` and ship the reduced variant with the animation.
-- Empty/loading/error states follow `rules/content.md` — neutral wording, next action offered, zero internals.
+- Empty/loading/error states follow `rules/content.md` — neutral wording, next action offered, zero internals. Async regions render skeletons matching the final layout (the primitive set's `Skeleton`); images cross-fade from a backend-provided preview when the contract has one.
 
 ## Anti-patterns — automatic rejections
 

@@ -72,7 +72,7 @@ export const Meta = styled.p`
 - App Router; pages and layouts are server components by default. styled components are client-side: any file that defines or imports them is a client component (`'use client'`). Keep pages on the server by isolating styled subtrees in client components.
 - Enable once in `next.config`: `compiler: { styledComponents: true }` — readable class names, SSR support, dead-code elimination.
 - Mount the SSR registry once in the root layout using the official pattern: a client registry component with `ServerStyleSheet` + `StyleSheetManager` + `useServerInsertedHTML`. Verify with a hard reload under network throttling: no flash of unstyled content.
-- Route-level `loading.tsx`, `error.tsx`, and `not-found.tsx` provide the neutral states from `rules/content.md`; data-fetching and bundle rules live in `rules/platforms.md`.
+- Route-level `loading.tsx` renders skeletons in the route's final layout — the shell stays mounted, never a bare spinner page; `error.tsx` and `not-found.tsx` provide the other neutral states from `rules/content.md`; data-fetching and bundle rules live in `rules/platforms.md`.
 
 ## Anti-patterns — automatic rejections
 

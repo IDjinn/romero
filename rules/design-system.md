@@ -54,3 +54,22 @@ Component base for all platforms. Web and desktop shells (browser, Electron, Tau
 - Validate inline per field (on blur/submit attempt), not only on final submit.
 - Labels are always visible; placeholder text is an example, never the label.
 - Error messages state what to do ("Use at least 8 characters"), never what broke internally (see `rules/content.md`).
+
+## Async data — skeletons in place
+
+- The screen mounts and renders immediately; async regions render **skeletons that match the final layout** — same rows, line counts, avatars, aspect ratios — so nothing shifts when data arrives. Gating content behind a full-page spinner until data resolves is a rejection.
+- Use the shadcn/ui `Skeleton` primitive (or the React Native equivalent from the primitive set). Buttons keep showing a spinner with their width intact (see Interactive states); spinners never replace skeletons inside content areas.
+- Images: when the API contract provides a placeholder, use it — a low-resolution preview or blur/dominant-color fill rendered at full size and cross-faded to the real image on load. When it doesn't, reserve the exact aspect ratio behind an image-shaped skeleton. Never a blank box that pops in, and never client-side placeholder logic that belongs in the contract.
+- The skeleton pulse is opacity-only constant motion (the primitive default) — never layout properties; `prefers-reduced-motion` renders a static dimmed placeholder.
+
+## File and folder inputs — three input paths (web/desktop)
+
+Any UI that asks for files or folders — uploads, imports, avatars, "open project" flows — offers **all three** input paths. A picker-only input is a rejection.
+
+- **Picker**: a real button opening the OS dialog, with `accept`/`multiple` (or folder capture) set from the API contract.
+- **Drag-and-drop**: the whole target surface is the drop zone, not a small dashed box. Visible `dragover` state; dropped folders are traversed on web (`webkitGetAsEntry` / `getAsFileSystemHandle`) when folders are accepted; Electron/Tauri accept OS-level file drops.
+- **Paste**: the target accepts clipboard paste of files and images (`paste` event / clipboard API) wherever the contract accepts them — screenshots included.
+
+- One validation path for all three: type, size, and count rules are enforced identically no matter how the files arrived; failures are neutral inline messages ("PDF up to 10 MB"), never internals (see `rules/content.md`).
+- The picker button remains the keyboard and screen-reader path — drop and paste are additions, never replacements.
+- The drop-target highlight animates `border-color`/`opacity` only, ≤200ms, with reduced-motion honored (see `rules/motion.md`).

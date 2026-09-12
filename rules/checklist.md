@@ -8,6 +8,7 @@ Walk the implementation, not the intention. Any "no" means the task is not done.
 - [ ] Dark theme (the default) and light theme both verified on every new or changed screen.
 - [ ] Only stock shadcn tokens and default palette values used; no custom colors unless explicitly requested.
 - [ ] Every interactive element has a visible `:focus-visible` ring, press feedback, hover gated behind `(hover: hover) and (pointer: fine)`, plus disabled and loading states.
+- [ ] Every file/folder input offers all three paths — picker button, drag-and-drop onto the whole target surface (folder-aware where folders are accepted), and clipboard paste — with one shared validation path.
 - [ ] Spacing on the 4px grid; consistent radius scale; layout holds at common breakpoints and with larger text sizes.
 - [ ] (React projects) Every styled definition lives in a `<Component>.styles.ts`/`.js` sibling file; styled components reference tokens only (`var(--token)` on web, `theme.*` on React Native); no `StyleSheet.create` or inline style objects in component files.
 - [ ] Styles are responsive: web uses `rem`/`em` only (no `px` or absolute units) with fluid layout verified at phone/tablet/desktop widths and 200% zoom; React Native uses theme scales with flex/percentage containers, no hardcoded container dimensions.
@@ -19,6 +20,7 @@ Walk the implementation, not the intention. Any "no" means the task is not done.
 - [ ] Only `transform`/`opacity` animated; no `scale(0)`; popover/dropdown/tooltip origins at the trigger; exits reverse their entries.
 - [ ] Rapidly triggered or gesture-driven UI uses transitions/springs (interruptible), never keyframes.
 - [ ] `prefers-reduced-motion` handled (gentler, not zero).
+- [ ] Skeleton pulses are opacity-only constant motion; reduced-motion renders a static placeholder.
 
 ## 3. Navigation pass (per platform in the task)
 
@@ -31,7 +33,9 @@ Walk the implementation, not the intention. Any "no" means the task is not done.
 ## 4. Content pass
 
 - [ ] Zero backend/internal details in UI copy, code comments, or component APIs ("not enabled", service names, mechanisms, internals).
-- [ ] Empty/loading/error states exist for all async data; wording is neutral; every error offers the next action.
+- [ ] No raw error reaches the UI: every failure is caught and shown as a simple message directing to retry/contact the administrator; full details are logged and surface only as a dev/admin toast.
+- [ ] The business-rule test was applied to every piece of feature logic written — no backend business rule is re-decided or re-explained in the frontend.
+- [ ] Empty/loading/error states exist for all async data; the page mounts before data arrives and loading renders in-place skeletons matching the final layout (images: backend preview/placeholder when the contract has one); wording is neutral; every error offers the next action.
 - [ ] One primary action per view; common path first; labels specific; language plain.
 - [ ] Confirmation dialogs only for irreversible destructive actions.
 
