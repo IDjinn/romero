@@ -36,6 +36,7 @@ Walk the implementation, not the intention. Any "no" means the task is not done.
 - [ ] No raw error reaches the UI: every failure is caught and shown as a simple message directing to retry/contact the administrator; full details are logged and surface only as a dev/admin toast.
 - [ ] The business-rule test was applied to every piece of feature logic written — no backend business rule is re-decided or re-explained in the frontend.
 - [ ] Empty/loading/error states exist for all async data; the page mounts before data arrives and loading renders in-place skeletons matching the final layout (images: backend preview/placeholder when the contract has one); wording is neutral; every error offers the next action.
+- [ ] Every list-like UI raised the paginate-or-not question and shipped paginated unless unpaginated was explicitly chosen; paging works end-to-end with page size/count from the API contract — no client-side slicing of unbounded data.
 - [ ] One primary action per view; common path first; labels specific; language plain.
 - [ ] Confirmation dialogs only for irreversible destructive actions.
 

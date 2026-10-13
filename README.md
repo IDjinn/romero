@@ -12,7 +12,8 @@ Agent-agnostic design rules for frontends — **web, desktop, and mobile**. Plai
 - **Redundant navigation**: every state is exitable two ways — a visible affordance plus the platform convention (browser back, Escape, Android back, iOS edge swipe, mouse side buttons).
 - **Zero backend leakage**: the UI never explains or exposes backend/internal implementation details; raw errors never reach the UI (simple messages; full details only as a dev/admin toast); backend business rules are never re-implemented in the frontend.
 - **Three-path file inputs on web/desktop**: wherever the UI asks for files or folders, drag-and-drop and clipboard paste work alongside the native picker.
-- **Skeletons for async data**: pages mount before data arrives; async regions render skeletons matching the final layout, and images cross-fade from backend-provided previews when available.
+- **Skeletons for async data**: components that depend on async data (API calls, queries) render layout-matching skeletons until the data populates; images cross-fade from backend-provided previews when available.
+- **Paginated listings by default**: list-like UIs always raise the paginate-or-not question, default to paginated when unanswered, and drive paging from the API contract.
 - **Clean, simplified design**: hierarchy, progressive disclosure, specific labels, plain language.
 
 ## How to adopt
@@ -26,7 +27,7 @@ Agent-agnostic design rules for frontends — **web, desktop, and mobile**. Plai
 | File | Purpose |
 | --- | --- |
 | `AGENTS.md` | Entry point: hard rules and module router |
-| `.agents/ui.md` | shadcn/ui foundations: theming, colors, typography, states, content rules, file inputs, skeletons |
+| `.agents/ui.md` | shadcn/ui foundations: theming, colors, typography, states, content rules, file inputs, skeletons, list pagination |
 | `.agents/react.md` | React/Next.js: styled-components layout, `.styles` files, SSR, performance |
 | `.agents/react-native.md` | React Native: styled-components/native layout, theme object, safe areas, performance |
 | `.agents/motion.md` | Animation gates, tokens, per-platform tooling, never-ship list |

@@ -9,13 +9,15 @@ Design rules for frontends on **web, desktop, and mobile**: shadcn/ui components
 - Motion is gated: purpose named, ≤300ms, `transform`/`opacity` only, reduced-motion shipped with the animation.
 - Every screen, overlay, and mode has ≥2 exits (visible affordance + platform convention).
 - Zero backend details in the frontend: raw errors never reach the UI (simple message; full details only as a dev/admin toast), and backend business rules stay in the backend.
+- Components that depend on async data render a skeleton matching the final layout until the data populates — never a blocking spinner or a blank flash.
+- List-like data is paginated by default: always ask whether to paginate before building it; unpaginated rendering only on an explicit choice.
 - (React projects) styled-components in sibling `<Component>.styles.ts` files; `rem`/`em` on web, theme tokens on React Native.
 
 ## Modules — read the one for your task
 
 | Task | Read |
 | --- | --- |
-| Any UI: components, theming, colors, typography, states, copy, file inputs, skeletons | `.agents/ui.md` |
+| Any UI: components, theming, colors, typography, states, copy, file inputs, skeletons, list pagination | `.agents/ui.md` |
 | React / Next.js: styled-components layout, style files, SSR, performance | `.agents/react.md` |
 | React Native: layout, theme object, safe areas, performance | `.agents/react-native.md` |
 | Animation, transitions, navigation feel | `.agents/motion.md` |

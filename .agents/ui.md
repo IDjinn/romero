@@ -57,10 +57,18 @@ Component base for all platforms. Web and desktop shells (browser, Electron, Tau
 
 ## Async data — skeletons in place
 
-- The screen mounts and renders immediately; async regions render **skeletons that match the final layout** — same rows, line counts, avatars, aspect ratios — so nothing shifts when data arrives. Gating content behind a full-page spinner until data resolves is a rejection.
+- Every component that depends on async data (API call, query, subscription, async prop) renders **skeletons that match the final layout** — same rows, line counts, avatars, aspect ratios — until the data populates. The screen mounts and renders immediately; gating content behind a full-page spinner until data resolves is a rejection.
 - Use the shadcn/ui `Skeleton` primitive (or the React Native equivalent from the primitive set). Buttons keep showing a spinner with their width intact (see Interactive states); spinners never replace skeletons inside content areas.
 - Images: when the API contract provides a placeholder, use it — a low-resolution preview or blur/dominant-color fill rendered at full size and cross-faded to the real image on load. When it doesn't, reserve the exact aspect ratio behind an image-shaped skeleton. Never a blank box that pops in, and never client-side placeholder logic that belongs in the contract.
 - The skeleton pulse is opacity-only constant motion (the primitive default) — never layout properties; `prefers-reduced-motion` renders a static dimmed placeholder.
+
+## Lists — paginated by default
+
+- Before building any list-like UI — table, feed, grid, search results — **ask whether it should be paginated**. That is a product decision, not the agent's: when in doubt, unanswered, or answered "you decide", build it **paginated**. Unpaginated lists only on an explicit choice.
+- Pagination is driven by the API contract — page/offset or cursor, page size, total count — never by fetching an unbounded list and slicing it client-side.
+- Web: numbered pagination controls or a "Load more" button; tables show page size and total count from the contract. React Native: the paginated form is a paged `FlatList`/`FlashList` that fetches one page per `onEndReached`, with a visible loading footer and a clean stop at the last page.
+- Loading a page renders skeletons matching real rows (see Async data above); a previous page stays visible until the new one is ready — no blank swap.
+- Infinite scroll ("load everything as you go") only on an explicit request — and virtualization (see `checklist.md`) still applies on top of any list length.
 
 ## File and folder inputs — three input paths (web/desktop)
 
